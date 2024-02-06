@@ -12,6 +12,8 @@ const app = express();
 app.use(cors());
 const port = 8383;
 app.use(bodyParser.json());
+const worker = createWorker();
+app.use(express.json());
 
 
 // Multer setup
@@ -108,7 +110,7 @@ const config = {
     },
     Cari_Vkn_Tckn:{
         possible:[
-          ['VKN',"TCKN","Vkn","Tckn","VKN/TC","VD"],
+          ['VKN',"TCKN","Vkn","Tckn","VKN/TC","VD","V.N.","V.D."],
           //["Numarası"]
         ],
         subtractPossibilities:true,
@@ -984,6 +986,86 @@ const specificArray = ['Sayın', 'Sayin', 'SN',"Sn","SAYIN"];
 
 
 
+// app.post('/upload', upload.single('image'), async (req, res) => {
+//     const worker = createWorker("tur");
+
+//     (async () => {
+//         await (await worker).load();
+        
+//         await (await worker).setParameters({
+//           //tessedit_char_whitelist: '0123456789abcdefghijklmnopqrstuvwxyz',
+//           preserve_interword_spaces: '0',
+//           psm: 6, // Example: Single block of text
+//           oem: 1 // Example: LSTM OCR only
+
+
+//         });
+//         const { data: { text } } = await (await worker).recognize(req.file.buffer);
+//         console.log(text);
+//         await (await worker).terminate();
+//       })();
+//     try {
+
+//         Tesseract.recognize(
+//             // this first argument is for the location of an image it can be a //url like below or you can set a local path in your computer
+//             req.file.buffer, 
+//             'tur',
+//             { logger: m => console.log(m),
+//                 psm: 6, // Experiment with different page segmentation modes
+//                 oem: 1, // Use different OCR engine modes     
+//             }
+//             ).then(({ data: { text } }) => {
+//             //console.log(text);
+//             let processedText = text.replace(/"/g, ''); 
+//             const textLines = processedText.split(/\r?\n/);
+//             const nonEmptyTextLines = textLines.filter(line => line.trim() !== '').map(line => line.trim());
+//             determineBillType(nonEmptyTextLines,billTypeChecker)
+//             .then(async(result) => {
+
+                
+//             if(result.type==="başka"){
+//                 const firmName=await findNearestValueInArray(nonEmptyTextLines, firmNameArray,specificArray,"")
+//                 const details= await processParameterObject(parameterObjectForFis,nonEmptyTextLines)
+//                 const table= await tableFinder(nonEmptyTextLines)
+//                 res.status(200).json({ 
+//                     success: true, 
+//                     textContent: processedText,
+//                     textLines:nonEmptyTextLines,
+//                     Cari_Adı:firmName,
+//                     billType:result.type,
+//                     ...details,
+//                     ...table,
+//                    }); 
+//             }
+//               else if(result.type!=="başka"){
+//                 const firmName=await findNearestValueInArray(nonEmptyTextLines, firmNameArray,specificArray,"")
+//                 const details= await processParameterObject(parameterObject,nonEmptyTextLines)
+//                 const table= await tableFinder(nonEmptyTextLines)
+//                 res.status(200).json({ 
+//                   success: true, 
+//                   textContent: processedText,
+//                   textLines:nonEmptyTextLines,
+//                   Cari_Adı:firmName,
+//                   billType:result.type,
+//                   ...details,
+//                   ...table,
+//                  });
+//               }else{
+//                 res.status(400).json("bu bir fatura değil")
+        
+//               }
+//             });
+
+//             //res.json({text:text})
+//             })
+//         .catch((error) => {
+//           console.log(error.message)
+//         })
+//     } catch (error) {
+//       console.error('Error:', error.message);
+//       res.status(500).send('Internal Server Error');
+//     }
+//   });
 app.post('/upload', upload.single('image'), async (req, res) => {
     
     try {
